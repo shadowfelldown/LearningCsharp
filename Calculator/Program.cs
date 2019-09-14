@@ -1,79 +1,54 @@
 ﻿using System;
-using Microsoft.Win32.SafeHandles;
-using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
-namespace Calculator
+namespace StopWatch
 {
-    public class AwesomeStopwatch : IDisposable
+    internal enum State { start, isrunning, noStopwatch, swStarted, swStopped, instructions }
+    
+    /// <summary>
+    /// Awesome Stopwatch Times things. has Start and stop methods.
+    /// </summary>
+    public class AwesomeStopwatch
     {
-        private DateTime _stopwatchTime;
+        private static DateTime _stopwatchTime;
 
-        public AwesomeStopwatch()
+        static AwesomeStopwatch()
         {
-            this._stopwatchTime = DateTime.MinValue;
+            _stopwatchTime = DateTime.MinValue;
 
         }
 
-        // Flag: Has Dispose already been called?
-        bool disposed = false;
-        // Instantiate a SafeHandle instance.
-        SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
-
-        // Public implementation of Dispose pattern callable by consumers.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                handle.Dispose();
-                // Free any other managed objects here.
-                //
-            }
-
-            disposed = true;
-        }
-
-        public void Start()
+        /// <summary>
+        /// Starts the stopwatch class. Throws error if stopwatch allready running.
+        /// </summary>
+        public static void Start()
         {
             try
             {
                 if (_stopwatchTime == DateTime.MinValue)
                 {
-                    this._stopwatchTime = DateTime.Now;
+                    _stopwatchTime = DateTime.Now;
 
-                    Console.Clear();
-                    Console.WriteLine("Stopwatch Started at {0}", _stopwatchTime);
-                    Console.WriteLine("(Press return to continue)");
-                    Console.ReadLine();
+                    Program.WriteText(State.swStarted, _stopwatchTime);
+                    Program.ContinuePrompt();
                 }
                 else
                 {
                     throw new InvalidOperationException();
                 }
-
             }
             catch (InvalidOperationException)
             {
-                Console.Clear();
-                Console.WriteLine("The stopwatch is already running...");
-                Console.WriteLine("(Press return to continue)");
-                Console.ReadLine();
+                Program.WriteText(State.isrunning);
+                Program.ContinuePrompt();
             }
-
         }
-        public void Stop()
+
+        /// <summary>
+        /// Stops the stopwatch class. Throws error if stopwatch not started.
+        /// </summary>
+        public static void Stop()
         {
             try
             {
@@ -84,28 +59,20 @@ namespace Calculator
                 else
                 {
                     Console.Clear();
-                    var stopTime = DateTime.Now;
-                    TimeSpan interval = stopTime - _stopwatchTime;
-                    Console.WriteLine("Stopwatch Stopped at {0}", stopTime);
-                    Console.WriteLine("Total Time Elapsed: {0}", interval);
-                    Console.WriteLine("(Press return to continue)");
-                    Console.ReadLine();
+                    DateTime stopTime = DateTime.Now;
+                    Program.WriteText(State.swStopped, stopTime, (stopTime - _stopwatchTime));
+                    Program.ContinuePrompt();
                 }
 
             }
             catch (InvalidOperationException)
             {
-                Console.Clear();
-                Console.WriteLine("No Running stopwatch...");
-                Console.WriteLine("(Press return to continue)");
-                Console.ReadLine();
+                Program.WriteText(State.noStopwatch);
+                Program.ContinuePrompt();
             }
             finally
             {
-                if (_stopwatchTime != DateTime.MinValue)
-                {
-                    Dispose();
-                }
+                _stopwatchTime = DateTime.MinValue;
             }
         }
 
@@ -114,36 +81,77 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
+            WriteText(State.start);
             ConsoleKeyInfo input;
-            AwesomeStopwatch stopwatch = new AwesomeStopwatch();
             do
             {
-                Console.Clear();
-                Console.WriteLine("Welcome to the Awesome Stopwatch!");
-                Console.WriteLine("================================");
-                Instructions();
+                WriteText(State.instructions);
                 input = Console.ReadKey(true);
-                Initialize(input, stopwatch);
+                readInput(input);
             } while (input.Key != ConsoleKey.Escape);
         }
-        static void Initialize(ConsoleKeyInfo input, AwesomeStopwatch stopwatch)
-        {
-            
-                if (input.KeyChar == (char)Keys.D0)
-                {
-                    stopwatch.Start();
-                }
-                if (input.KeyChar == (char)Keys.D1)
-                {
-                    stopwatch.Stop();
-                }
 
-            
-        }
-        static void Instructions()
+        /// <summary>
+        /// reads input from the user
+        /// </summary>
+        /// <param name="input"></param>
+        static void readInput(ConsoleKeyInfo input)
         {
-            Console.WriteLine("Instructions:\n");
-            Console.WriteLine("Press the '0' key to start the stopwatch.\nPress the '1' key to stop the Stopwatch \nPress the (esc) key to quit.");
+            if (input.KeyChar == (char)Keys.D0)
+            {
+                AwesomeStopwatch.Start();
+            }
+            if (input.KeyChar == (char)Keys.D1)
+            {
+                AwesomeStopwatch.Stop();
+            }
+        }
+
+        /// <summary>
+        /// Writes Text to the Console based on required currentState enum. Can accept an optional DateTime and TimeSpan as well to display details.
+        /// </summary>
+        /// <param name="currentState"></param>
+        /// <param name="stopTime"></param>
+        /// <param name="interval"></param>
+        public static void WriteText(State currentState, DateTime stopTime = default, TimeSpan interval = default)
+        {
+            Console.Clear();
+            switch (currentState)
+            {
+                case State.start:
+                    Console.WriteLine("Welcome to the Awesome Stopwatch!");
+                    Console.WriteLine("================================");
+                    break;
+                case State.isrunning:
+                    Console.WriteLine("The Stopwatch is already running...");
+                    break;
+                case State.noStopwatch:
+                    Console.WriteLine("No Running stopwatch...");
+                    break;
+                case State.instructions:
+                    Console.WriteLine("Instructions:\n");
+                    Console.WriteLine("================================");
+                    Console.WriteLine("Press the '0' key to start the stopwatch.\nPress the '1' key to stop the Stopwatch \nPress the (esc) key to quit.");
+                    break;
+                case State.swStarted:
+                    Console.WriteLine("Stopwatch Started at {0}", stopTime);
+                    break;
+                case State.swStopped:
+                    Console.WriteLine("Stopwatch Stopped at {0}", stopTime);
+                    Console.WriteLine("Total Time Elapsed: {0}", interval);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Displays a prompt to continue and waits for user input.
+        /// </summary>
+        public static void ContinuePrompt()
+        {
+            Console.WriteLine("(Press any key to continue)");
+            Console.ReadKey();
         }
     }
 }

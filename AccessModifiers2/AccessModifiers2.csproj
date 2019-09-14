@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D68A03A0-DC80-47E8-8175-68F30C7A71E2}</ProjectGuid>
+    <ProjectGuid>{8CF3DD0F-30DA-4B86-ABE4-0136FD04B603}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>OverflowPost</RootNamespace>
-    <AssemblyName>OverflowPost</AssemblyName>
+    <RootNamespace>AccessModifiers2</RootNamespace>
+    <AssemblyName>AccessModifiers2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Amazon\Amazon.csproj">
+      <Project>{3073BB22-0E68-4D5D-A4CF-8ABF4385F969}</Project>
+      <Name>Amazon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

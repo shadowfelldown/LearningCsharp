@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D68A03A0-DC80-47E8-8175-68F30C7A71E2}</ProjectGuid>
+    <ProjectGuid>{0401EFA1-87D2-4044-A3F3-D5D63650CCB5}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>OverflowPost</RootNamespace>
-    <AssemblyName>OverflowPost</AssemblyName>
+    <RootNamespace>DatabaseConnect</RootNamespace>
+    <AssemblyName>DatabaseConnect</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
