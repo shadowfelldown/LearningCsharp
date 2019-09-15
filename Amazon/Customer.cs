@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Amazon
+﻿namespace Amazon
 {
     public class Customer
     {

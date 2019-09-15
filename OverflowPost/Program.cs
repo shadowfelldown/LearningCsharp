@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace OverflowPost
 {
@@ -23,7 +22,7 @@ namespace OverflowPost
         }
         public static void SortList()
         {
-    Post_List = PostList.Post_List.OrderByDescending(p => p.Votes).ToList();
+            Post_List = PostList.Post_List.OrderByDescending(p => p.Votes).ToList();
         }
     }
     public class Post
@@ -81,9 +80,9 @@ namespace OverflowPost
             foreach (var post in PostList.Post_List)
             {
                 Console.WriteLine("======================");
-                Console.WriteLine("Title: {0}",post.Title);
+                Console.WriteLine("Title: {0}", post.Title);
                 Console.WriteLine("Description: {0}", post.Description);
-                Console.WriteLine("Votes: {0}",post.Votes);
+                Console.WriteLine("Votes: {0}", post.Votes);
             }
             Console.ReadKey();
         }

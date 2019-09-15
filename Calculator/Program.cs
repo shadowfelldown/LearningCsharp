@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace StopWatch
 {
     internal enum State { start, isrunning, noStopwatch, swStarted, swStopped, instructions }
-    
+
     /// <summary>
     /// Awesome Stopwatch Times things. has Start and stop methods.
     /// </summary>
